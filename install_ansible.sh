@@ -32,6 +32,10 @@ if [ ! $(which ansible-playbook) ]; then
     yum -y install epel-release
 
     yum -y install PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko python-setuptools git python-pip
+    # If python-pip install failed and setuptools exists, try that
+    if [[ -z "$(which pip)" && -n "$(which easy_install)" ]]; then
+      easy_install pip
+    fi
 
     # Install passlib for encrypt
     yum -y groupinstall "Development tools"
@@ -50,6 +54,10 @@ if [ ! $(which ansible-playbook) ]; then
 
     # Install required Python libs and pip
     apt-get install -y python-yaml python-jinja2 python-httplib2 python-keyczar python-paramiko python-setuptools python-pkg-resources git python-pip
+    # If python-pip install failed and setuptools exists, try that
+    if [[ -z "$(which pip)" && -n "$(which easy_install)" ]]; then
+      easy_install pip
+    fi
 
     # Install passlib for encrypt
     apt-get install -y build-essential

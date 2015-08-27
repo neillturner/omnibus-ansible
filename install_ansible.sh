@@ -31,9 +31,12 @@ if [ ! $(which ansible-playbook) ]; then
     yum_makecache_retry
     yum -y install epel-release
 
-    yum -y install PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko python-setuptools git python-pip
+    yum -y install python-pip PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko git
     # If python-pip install failed and setuptools exists, try that
-    if [[ -z "$(which pip)" && -n "$(which easy_install)" ]]; then
+    if [[ -z "$(which pip)" && -z "$(which easy_install)" ]]; then
+      yum -y install python-setuptools
+      easy_install pip
+    elif [[ -z "$(which pip)" && -n "$(which easy_install)" ]]; then
       easy_install pip
     fi
 
@@ -54,11 +57,17 @@ if [ ! $(which ansible-playbook) ]; then
     # apt-get install -y ansible
 
     # Install required Python libs and pip
-    apt-get install -y python-yaml python-jinja2 python-httplib2 python-keyczar python-paramiko python-setuptools python-pkg-resources git python-pip
+    apt-get install -y  python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources git
+    [[ -n "$( apt-cache search python-keyczar )" ]] && apt-get install -y  python-keyczar
     # If python-pip install failed and setuptools exists, try that
-    if [[ -z "$(which pip)" && -n "$(which easy_install)" ]]; then
+    if [[ -z "$(which pip)" && -z "$(which easy_install)" ]]; then
+      apt-get -y install python-setuptools
+      easy_install pip
+    elif [[ -z "$(which pip)" && -n "$(which easy_install)" ]]; then
       easy_install pip
     fi
+    # If python-keyczar apt package does not exist, use pip
+    [[ -z "$( apt-cache search python-keyczar )" ]] && sudo pip install python-keyczar
 
     # Install passlib for encrypt
     apt-get install -y build-essential

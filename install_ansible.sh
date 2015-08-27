@@ -45,6 +45,7 @@ if [ ! $(which ansible-playbook) ]; then
     yum -y install bzip2 file findutils git gzip hg procps-ng svn sudo tar which unzip xz zip
 
   elif [ -f /etc/debian_version ] || [ grep -qi ubuntu /etc/lsb-release ] || grep -qi ubuntu /etc/os-release; then
+    apt-get update
     # Install via package
     # apt-get update && \
     # apt-get install --no-install-recommends -y software-properties-common && \

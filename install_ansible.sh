@@ -57,8 +57,11 @@ if [ ! $(which ansible-playbook) ]; then
     # apt-get install -y ansible
 
     # Install required Python libs and pip
-    apt-get install -y  python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources git
+    apt-get install -y  python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources
     [[ -n "$( apt-cache search python-keyczar )" ]] && apt-get install -y  python-keyczar
+    if ! apt-get install -y git ; then
+      apt-get install -y git-core
+    fi
     # If python-pip install failed and setuptools exists, try that
     if [[ -z "$(which pip)" && -z "$(which easy_install)" ]]; then
       apt-get -y install python-setuptools

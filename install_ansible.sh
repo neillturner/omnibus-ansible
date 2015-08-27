@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #TODO.md
 yum_makecache_retry() {
   tries=0
@@ -10,7 +10,7 @@ yum_makecache_retry() {
   done
 }
 
-if [[ "$KITCHEN_LOG" == "DEBUG" || "$OMNIBUS_ANSIBLE_LOG" == "DEBUG" ]]; then
+if [ "x$KITCHEN_LOG" = "xDEBUG" -o "x$OMNIBUS_ANSIBLE_LOG" = "xDEBUG" ]; then
   export PS4='(${BASH_SOURCE}:${LINENO}): - [${SHLVL},${BASH_SUBSHELL},$?] $ '
   set -x
 fi
@@ -33,10 +33,10 @@ if [ ! $(which ansible-playbook) ]; then
 
     yum -y install python-pip PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko git
     # If python-pip install failed and setuptools exists, try that
-    if [[ -z "$(which pip)" && -z "$(which easy_install)" ]]; then
+    if [ -z "$(which pip)" -a -z "$(which easy_install)" ]; then
       yum -y install python-setuptools
       easy_install pip
-    elif [[ -z "$(which pip)" && -n "$(which easy_install)" ]]; then
+    elif [ -z "$(which pip)" -a -n "$(which easy_install)" ]; then
       easy_install pip
     fi
 
@@ -58,19 +58,19 @@ if [ ! $(which ansible-playbook) ]; then
 
     # Install required Python libs and pip
     apt-get install -y  python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources
-    [[ -n "$( apt-cache search python-keyczar )" ]] && apt-get install -y  python-keyczar
+    [ -n "$( apt-cache search python-keyczar )" ] && apt-get install -y  python-keyczar
     if ! apt-get install -y git ; then
       apt-get install -y git-core
     fi
     # If python-pip install failed and setuptools exists, try that
-    if [[ -z "$(which pip)" && -z "$(which easy_install)" ]]; then
+    if [ -z "$(which pip)" -a -z "$(which easy_install)" ]; then
       apt-get -y install python-setuptools
       easy_install pip
-    elif [[ -z "$(which pip)" && -n "$(which easy_install)" ]]; then
+    elif [ -z "$(which pip)" -a -n "$(which easy_install)" ]; then
       easy_install pip
     fi
     # If python-keyczar apt package does not exist, use pip
-    [[ -z "$( apt-cache search python-keyczar )" ]] && sudo pip install python-keyczar
+    [ -z "$( apt-cache search python-keyczar )" ] && sudo pip install python-keyczar
 
     # Install passlib for encrypt
     apt-get install -y build-essential

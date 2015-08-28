@@ -45,7 +45,7 @@ if [ ! $(which ansible-playbook) ]; then
     yum -y install python-devel MySQL-python sshpass && pip install pyrax pysphere boto passlib
 
     # Install Ansible module dependencies
-    yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip python-selinux
+    yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip libselinux-python
     [ -n "$(yum search procps-ng)" ] && yum -y install procps-ng || yum -y install procps
   elif [ -f /etc/debian_version ] || [ grep -qi ubuntu /etc/lsb-release ] || grep -qi ubuntu /etc/os-release; then
     apt-get update

@@ -2,6 +2,7 @@
 Install latest Ansible via pip + dependencies via a shell script
 
 This file is used to install ansible in test kitchen when you set in the kitchen.yaml file
+
 require_ansible_omnibus: true 
 
 By default test kitchen will always download and use the latest version of this install file. 

@@ -30,6 +30,8 @@ if [ ! $(which ansible-playbook) ]; then
     rm -rf /var/cache/yum
     yum_makecache_retry
     yum -y install epel-release
+    # One more time with EPEL to avoid failures
+    yum_makecache_retry
 
     yum -y install python-pip PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko git
     # If python-pip install failed and setuptools exists, try that

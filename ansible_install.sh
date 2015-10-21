@@ -44,7 +44,7 @@ if [ ! $(which ansible-playbook) ]; then
 
     # Install passlib for encrypt
     yum -y groupinstall "Development tools"
-    yum -y install python-devel MySQL-python sshpass && pip install pyrax pysphere boto passlib
+    yum -y install python-devel MySQL-python sshpass && pip install pyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies
     yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip libselinux-python
@@ -76,7 +76,7 @@ if [ ! $(which ansible-playbook) ]; then
 
     # Install passlib for encrypt
     apt-get install -y build-essential
-    apt-get install -y python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib
+    apt-get install -y python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies
     apt-get install -y bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux

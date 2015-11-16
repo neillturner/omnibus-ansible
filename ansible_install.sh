@@ -1,5 +1,8 @@
 #!/bin/sh
 #TODO.md
+
+ANSIBLE_VERSION="${1}"
+
 yum_makecache_retry() {
   tries=0
   until [ $tries -ge 5 ]
@@ -89,7 +92,12 @@ if [ ! $(which ansible-playbook) ]; then
 
   mkdir /etc/ansible/
   echo -e '[local]\nlocalhost\n' > /etc/ansible/hosts
-  pip install ansible
+
+  if [ -z $ANSIBLE_VERSION ]; then
+    pip install ansible
+  else
+    pip install ansible==${ANSIBLE_VERSION}
+  fi
 
   if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/oracle-release ] || [ -f /etc/system-release ] || grep -q 'Amazon Linux' /etc/system-release; then
     # Fix for pycrypto pip / yum issue

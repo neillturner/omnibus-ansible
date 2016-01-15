@@ -1,7 +1,7 @@
 #!/bin/sh
 #TODO.md
 
-if [ "$1" == "-v" ]; then
+if [ "$1" = "-v" ]; then
   ANSIBLE_VERSION="${2}"
 fi
 

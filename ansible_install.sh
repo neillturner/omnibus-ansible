@@ -15,6 +15,17 @@ yum_makecache_retry() {
   done
 }
 
+
+apt_check_lock() {
+  while [ ]
+  do
+    sleep 1
+    ps -C apt-get,dpkg | grep -E "apt-get|dpkg"
+     test $? = 1 && break
+  done
+
+}
+
 if [ "x$KITCHEN_LOG" = "xDEBUG" -o "x$OMNIBUS_ANSIBLE_LOG" = "xDEBUG" ]; then
   export PS4='(${BASH_SOURCE}:${LINENO}): - [${SHLVL},${BASH_SUBSHELL},$?] $ '
   set -x
@@ -55,6 +66,7 @@ if [ ! $(which ansible-playbook) ]; then
     yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip libselinux-python
     [ -n "$(yum search procps-ng)" ] && yum -y install procps-ng || yum -y install procps
   elif [ -f /etc/debian_version ] || [ grep -qi ubuntu /etc/lsb-release ] || grep -qi ubuntu /etc/os-release; then
+    apt_check_lock
     apt-get update
     # Install via package
     # apt-get update && \
@@ -64,13 +76,16 @@ if [ ! $(which ansible-playbook) ]; then
     # apt-get install -y ansible
 
     # Install required Python libs and pip
+    apt_check_lock
     apt-get install -y  python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources
-    [ -n "$( apt-cache search python-keyczar )" ] && apt-get install -y  python-keyczar
+    [ -n "$( apt-cache search python-keyczar )" ] && apt_check_lock && apt-get install -y  python-keyczar
     if ! apt-get install -y git ; then
+      apt_check_lock
       apt-get install -y git-core
     fi
     # If python-pip install failed and setuptools exists, try that
     if [ -z "$(which pip)" -a -z "$(which easy_install)" ]; then
+      apt_check_lock
       apt-get -y install python-setuptools
       easy_install pip
     elif [ -z "$(which pip)" -a -n "$(which easy_install)" ]; then
@@ -80,10 +95,13 @@ if [ ! $(which ansible-playbook) ]; then
     [ -z "$( apt-cache search python-keyczar )" ] && sudo pip install python-keyczar
 
     # Install passlib for encrypt
+    apt_check_lock
     apt-get install -y build-essential
+    apt_check_lock
     apt-get install -y python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies
+    apt_check_lock
     apt-get install -y bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux
 
   else

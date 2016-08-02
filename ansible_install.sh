@@ -15,9 +15,16 @@ yum_makecache_retry() {
   done
 }
 
+wait_for_cloud_init() {
+  while pgrep -f "/usr/bin/python /usr/bin/cloud-init" >/dev/null 2>&1; do
+    echo "Waiting for cloud-init to complete"
+    sleep 1
+  done
+}
 
 dpkg_check_lock() {
   while fuser /var/lib/dpkg/lock >/dev/null 2>&1; do
+    echo "Waiting for dpkg lock release"
     sleep 1
   done
 }
@@ -62,23 +69,18 @@ if [ ! $(which ansible-playbook) ]; then
     yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip libselinux-python
     [ -n "$(yum search procps-ng)" ] && yum -y install procps-ng || yum -y install procps
   elif [ -f /etc/debian_version ] || [ grep -qi ubuntu /etc/lsb-release ] || grep -qi ubuntu /etc/os-release; then
-    dpkg_check_lock && apt-get update
-    # Install via package
-    # apt-get update && \
-    # apt-get install --no-install-recommends -y software-properties-common && \
-    # apt-add-repository ppa:ansible/ansible && \
-    # apt-get update && \
-    # apt-get install -y ansible
+    wait_for_cloud_init
+    dpkg_check_lock && apt-get update -q
 
     # Install required Python libs and pip
-    dpkg_check_lock && apt-get install -y  python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources
-    [ -n "$( dpkg_check_lock && apt-cache search python-keyczar )" ] && dpkg_check_lock && apt-get install -y  python-keyczar
+    dpkg_check_lock && apt-get install -q -y  python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources
+    [ -n "$( dpkg_check_lock && apt-cache search python-keyczar )" ] && dpkg_check_lock && apt-get install -q -y  python-keyczar
     if [ ! $(dpkg_check_lock && apt-get install -y git) ] ; then
-      dpkg_check_lock && apt-get install -y git-core
+      dpkg_check_lock && apt-get install -q -y git-core
     fi
     # If python-pip install failed and setuptools exists, try that
     if [ -z "$(which pip)" -a -z "$(which easy_install)" ]; then
-      dpkg_check_lock && apt-get -y install python-setuptools
+      dpkg_check_lock && apt-get -q -y install python-setuptools
       easy_install pip
     elif [ -z "$(which pip)" -a -n "$(which easy_install)" ]; then
       easy_install pip
@@ -87,11 +89,11 @@ if [ ! $(which ansible-playbook) ]; then
     [ -z "$( apt-cache search python-keyczar )" ] && sudo pip install python-keyczar
 
     # Install passlib for encrypt
-    dpkg_check_lock && apt-get install -y build-essential
-    dpkg_check_lock && apt-get install -y python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython
+    dpkg_check_lock && apt-get install -q -y build-essential
+    dpkg_check_lock && apt-get install -q -y python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies
-    dpkg_check_lock && apt-get install -y bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux
+    dpkg_check_lock && apt-get install -q -y bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux
 
   else
     echo 'WARN: Could not detect distro or distro unsupported'
@@ -102,9 +104,9 @@ if [ ! $(which ansible-playbook) ]; then
   mkdir /etc/ansible/
   echo -e '[local]\nlocalhost\n' > /etc/ansible/hosts
   if [ -z $ANSIBLE_VERSION ]; then
-    pip install ansible
+    pip install -q ansible
   else
-    pip install ansible==${ANSIBLE_VERSION}
+    pip install -q ansible==${ANSIBLE_VERSION}
   fi
   if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/oracle-release ] || [ -f /etc/system-release ] || grep -q 'Amazon Linux' /etc/system-release; then
     # Fix for pycrypto pip / yum issue

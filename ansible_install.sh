@@ -106,6 +106,7 @@ if [ ! "$(which ansible-playbook)" ]; then
     echo 'WARN: Not all functionality of ansible may be available'
   fi
 
+  pip install -q six --upgrade
   mkdir -p /etc/ansible/
   printf "%s\n" "[local]" "localhost" > /etc/ansible/hosts
   if [ -z "$ANSIBLE_VERSION" ]; then

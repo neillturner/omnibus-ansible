@@ -30,8 +30,8 @@ dpkg_check_lock() {
 }
 
 apt_install() {
-  dpkg_check_lock && apt-get install -y -o DPkg::Options::=--force-confold \
-    -o DPkg::Options::=--force-confdef "$@"
+  dpkg_check_lock && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    -o DPkg::Options::=--force-confold -o DPkg::Options::=--force-confdef "$@"
 }
 
 if [ "x$KITCHEN_LOG" = "xDEBUG" ] || [ "x$OMNIBUS_ANSIBLE_LOG" = "xDEBUG" ]; then

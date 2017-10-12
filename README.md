@@ -30,6 +30,9 @@ Supported platforms:
  - `debian-6.0.10` - Works!
  - `debian-7.8` - Works!
  - `debian-8.1` - Works!
+ - `suse-11.sp4` - Works!
+ - `suse-12.sp2` - Works!
+ - `fedora-24` - Works!
 
 
 It does some basic OS detection and tries to install all the things that Ansible needs, including some optional packages which are technically dependencies of some core Ansible modules (Ansible playbooks that use these modules would simply fail without them). 

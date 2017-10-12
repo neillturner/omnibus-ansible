@@ -127,7 +127,6 @@ if [ ! "$(which ansible-playbook)" ]; then
       easy_install pip
     fi
 
-    # Install passlib for encrypt
   else
     echo 'WARN: Could not detect distro or distro unsupported'
     echo 'WARN: Trying to install ansible via pip without some dependencies'

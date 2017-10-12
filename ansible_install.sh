@@ -100,6 +100,34 @@ if [ ! "$(which ansible-playbook)" ]; then
     # Install Ansible module dependencies
     apt_install bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux
 
+  elif [ -f /etc/SuSE-release ] ; then
+    zypper --quiet --non-interactive refresh
+
+    # Install required Python libs and pip
+    zypper --quiet --non-interactive install libffi-devel openssl-devel python-devel perl-Error
+    zypper --quiet --non-interactive install git || zypper --quiet --non-interactive install git-core
+
+    # If python-pip install failed and setuptools exists, try that
+    if [ -z "$(which pip)" ] && [ -z "$(which easy_install)" ]; then
+      zypper --quiet --non-interactive install python-setuptools
+      easy_install pip
+    elif [ -z "$(which pip)" ] && [ -n "$(which easy_install)" ]; then
+      easy_install pip
+    fi
+
+  elif [ -f /etc/fedora-release ]; then
+    # Install required Python libs and pip
+    dnf -y install gcc libffi-devel openssl-devel python-devel
+
+    # If python-pip install failed and setuptools exists, try that
+    if [ -z "$(which pip)" ] && [ -z "$(which easy_install)" ]; then
+      dng -y install python-setuptools
+      easy_install pip
+    elif [ -z "$(which pip)" ] && [ -n "$(which easy_install)" ]; then
+      easy_install pip
+    fi
+
+    # Install passlib for encrypt
   else
     echo 'WARN: Could not detect distro or distro unsupported'
     echo 'WARN: Trying to install ansible via pip without some dependencies'

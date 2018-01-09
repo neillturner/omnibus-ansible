@@ -9,7 +9,7 @@ yum -y install libselinux-python python-wheel python-pip git docker-ce
 systemctl start docker
 systemctl enable docker
 
-pip install ansible boto boto3 docker
+pip install ansible boto boto3 docker ansible-tower-cli
 
 git clone --depth 50 https://github.com/ansible/awx.git ~/awx
 cd ~/awx/installer/

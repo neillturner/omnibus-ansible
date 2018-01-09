@@ -1,5 +1,7 @@
 #!/bin/bash
-
+#
+# Installs Ansible AWX for Centos 7
+#
 yum -y install epel-release yum-utils
 
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo

@@ -94,7 +94,8 @@ if [ ! "$(which ansible-playbook)" ]; then
     [ -z "$( apt-cache search python-keyczar )" ] && sudo pip install python-keyczar
 
     # Install passlib for encrypt
-    apt_install build-essential
+    apt_install build-essential libssl-dev
+    [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install cryptography==2.0.3
     apt_install python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies

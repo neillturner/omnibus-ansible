@@ -79,7 +79,7 @@ if [ ! "$(which ansible-playbook)" ]; then
     dpkg_check_lock && apt-get update -q
 
     # Install required Python libs and pip
-    apt_install python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources libffi-dev
+    apt_install python-pip python-yaml python-jinja2 python-httplib2 python-netaddr python-paramiko python-pkg-resources libffi-dev
     [ -n "$( dpkg_check_lock && apt-cache search python-keyczar )" ] && apt_install python-keyczar
     dpkg_check_lock && apt-cache search ^git$ | grep -q "^git\s" && apt_install git || apt_install git-core
 
@@ -95,10 +95,10 @@ if [ ! "$(which ansible-playbook)" ]; then
 
     # Install passlib for encrypt
     apt_install build-essential
-    apt_install python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython
+    apt_install python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
 
     # Install Ansible module dependencies
-    apt_install bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux
+    apt_install bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux python-boto
 
   elif [ -f /etc/SuSE-release ] ; then
     zypper --quiet --non-interactive refresh

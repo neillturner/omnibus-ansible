@@ -88,17 +88,15 @@ if [ ! "$(which ansible-playbook)" ]; then
     if [ -z "$(which pip)" ] && [ -z "$(which easy_install)" ]; then
       apt_install python-setuptools
       easy_install pip
-      pip install -U setuptools==39.0.1
     elif [ -z "$(which pip)" ] && [ -n "$(which easy_install)" ]; then
       easy_install pip
-      pip install -U setuptools==39.0.1
     fi
     echo "------> If python-keyczar apt package does not exist, use pip"
     [ -z "$( apt-cache search python-keyczar )" ] && sudo pip install python-keyczar
 
     echo "------> Install passlib for encrypt"
     apt_install build-essential
-    # [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install -U setuptools==39.0.1
+    [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install -U setuptools==39.0.1
     [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install cryptography==2.0.3
     apt_install python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython
 

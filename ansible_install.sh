@@ -95,7 +95,7 @@ if [ ! "$(which ansible-playbook)" ]; then
 
     # Install passlib for encrypt
     apt_install build-essential
-    [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install cryptography==2.0.3
+    # [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install cryptography==2.0.3
     apt_install python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
 
     # Install Ansible module dependencies

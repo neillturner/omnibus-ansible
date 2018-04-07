@@ -96,11 +96,12 @@ if [ ! "$(which ansible-playbook)" ]; then
 
     echo "------> Install passlib for encrypt"
     apt_install build-essential
+    echo "------> Install setuptools"
     [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install -U setuptools==39.0.1
+    echo "------> Install cryptography"
     [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install cryptography==2.0.3
-    apt_install python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython
-
-    # pyopenssl
+    echo "------> Install packages for passlib"
+    apt_install python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
 
     echo "------> Install Ansible module dependencies"
     apt_install bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux python-boto

@@ -68,8 +68,9 @@ if [ ! "$(which ansible-playbook)" ]; then
 
     # Install passlib for encrypt
     yum -y groupinstall "Development tools"
-    yum -y install python-devel MySQL-python sshpass libffi-devel openssl-devel && pip install pyrax pysphere boto passlib dnspython  pyopenssl
-
+    yum -y install python-devel MySQL-python sshpass libffi-devel openssl-devel && pip install pyrax pysphere boto passlib dnspython
+    pip install pyopenssl ndg-httpsclient pyasn1
+    
     # Install Ansible module dependencies
     yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip libselinux-python
     [ -n "$(yum search procps-ng)" ] && yum -y install procps-ng || yum -y install procps

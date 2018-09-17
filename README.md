@@ -26,6 +26,7 @@ Supported platforms:
  - `ubuntu-14.10` - Works!
  - `ubuntu-15.04` - Works!
  - `ubuntu-16.04` - Works!
+ - `ubuntu-18.04` - Works!
  - `debian-6.0.8` - Works!
  - `debian-6.0.10` - Works!
  - `debian-7.8` - Works!

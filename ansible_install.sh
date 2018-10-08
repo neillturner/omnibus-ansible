@@ -101,6 +101,9 @@ if [ ! "$(which ansible-playbook)" ]; then
     # Install Ansible module dependencies
     apt_install bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux python-boto
 
+    # Install Ansible galaxy
+    apt_install ansible-galaxy
+
   elif [ -f /etc/SuSE-release ] ; then
     zypper --quiet --non-interactive refresh
 

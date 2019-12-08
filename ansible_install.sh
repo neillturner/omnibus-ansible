@@ -105,7 +105,7 @@ if [ ! "$(which ansible-playbook)" ]; then
     zypper --quiet --non-interactive refresh
 
     # Install required Python libs and pip
-    zypper --quiet --non-interactive install libffi-devel openssl-devel python-devel perl-Error
+    zypper --quiet --non-interactive install libffi-devel openssl-devel python-devel perl-Error python-xml rpm-python
     zypper --quiet --non-interactive install git || zypper --quiet --non-interactive install git-core
 
     # If python-pip install failed and setuptools exists, try that

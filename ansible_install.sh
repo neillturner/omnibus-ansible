@@ -149,6 +149,12 @@ if [ ! "$(which ansible-playbook)" ]; then
   else
     pip install -q ansible=="$ANSIBLE_VERSION"
   fi
+  ansible --version
+  ansible-playbook --version
+  which ansible
+  which ansible-playbook
+  find / -iname ansible
+  find / -iname ansible-playbook
   set +x
   if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/oracle-release ] || [ -f /etc/system-release ]; then
     # Fix for pycrypto pip / yum issue

@@ -141,7 +141,7 @@ if [ ! "$(which ansible-playbook)" ]; then
   printf "%s\n" "[local]" "localhost" > /etc/ansible/hosts
   set -x
   if [ -z "$ANSIBLE_VERSION" -a -n "$(which pip3)" ]; then
-    pip3 install -q ansible
+    pip3 install ansible
   elif [ -n "$(which pip3)" ]; then
     pip3 install -q ansible=="$ANSIBLE_VERSION"
   elif [ -z "$ANSIBLE_VERSION" ]; then

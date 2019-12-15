@@ -155,8 +155,6 @@ if [ ! "$(which ansible-playbook)" ]; then
   which ansible-playbook
   find / -iname ansible
   find / -iname ansible-playbook
-  cat /etc/environment
-  echo PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games" > /etc/environment
   set +x
   if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/oracle-release ] || [ -f /etc/system-release ]; then
     # Fix for pycrypto pip / yum issue

@@ -68,10 +68,12 @@ if [ ! "$(which ansible-playbook)" ]; then
 
     # Install passlib for encrypt
     yum -y groupinstall "Development tools"
-    yum -y install python-devel MySQL-python sshpass libffi-devel openssl-devel && pip install pyrax pysphere boto passlib dnspython
+    yum -y install sshpass libffi-devel openssl-devel && pip install pyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies
-    yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip libselinux-python
+    yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip
+    [ ! -n "$(grep ':8' /etc/system-release-cpe)" ] && yum -y install libselinux-python python-devel MySQL-python
+    [ -n "$(grep ':8' /etc/system-release-cpe)" ] && yum -y install python36-devel python3-PyMySQL python3-pip
     [ -n "$(yum search procps-ng)" ] && yum -y install procps-ng || yum -y install procps
 
   elif [ -f /etc/debian_version ] || grep -qi ubuntu /etc/lsb-release || grep -qi ubuntu /etc/os-release; then
@@ -137,11 +139,19 @@ if [ ! "$(which ansible-playbook)" ]; then
   pip install -q six --upgrade
   mkdir -p /etc/ansible/
   printf "%s\n" "[local]" "localhost" > /etc/ansible/hosts
-  if [ -z "$ANSIBLE_VERSION" ]; then
+  set -x
+  if [ -z "$ANSIBLE_VERSION" -a -n "$(which pip3)" ]; then
+    pip3 install -q ansible
+  elif [ -n "$(which pip3)" ]; then
+    pip3 install -q ansible=="$ANSIBLE_VERSION"
+  elif [ -z "$ANSIBLE_VERSION" ]; then
     pip install -q ansible
   else
     pip install -q ansible=="$ANSIBLE_VERSION"
   fi
+  [ -n "$(grep ':8' /etc/system-release-cpe)" ] && ln -s /usr/local/bin/ansible /usr/bin/
+  [ -n "$(grep ':8' /etc/system-release-cpe)" ] && ln -s /usr/local/bin/ansible-playbook /usr/bin/
+  set +x
   if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/oracle-release ] || [ -f /etc/system-release ]; then
     # Fix for pycrypto pip / yum issue
     # https://github.com/ansible/ansible/issues/276

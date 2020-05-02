@@ -87,10 +87,10 @@ if [ ! "$(which ansible-playbook)" ]; then
     dpkg_check_lock && apt-cache search ^git$ | grep -q "^git\s" && apt_install git || apt_install git-core
 
     # If python-pip install failed and setuptools exists, try that
-    if [ -z "$(which pip)" ] && [ -z "$(which easy_install)" ]; then
+    if [ -z "$(which pip3)" ] && [ -z "$(which pip)" ] && [ -z "$(which easy_install)" ]; then
       apt_install python-setuptools
       easy_install pip
-    elif [ -z "$(which pip)" ] && [ -n "$(which easy_install)" ]; then
+    elif [ -z "$(which pip3)" ] && [ -z "$(which pip)" ] && [ -n "$(which easy_install)" ]; then
       easy_install pip
     fi
     # If python-keyczar apt package does not exist, use pip
@@ -151,8 +151,8 @@ if [ ! "$(which ansible-playbook)" ]; then
     pip install -q six --upgrade
     pip install -q ansible=="$ANSIBLE_VERSION"
   fi
-  [ -n "$(grep ':8' /etc/system-release-cpe)" ] && ln -s /usr/local/bin/ansible /usr/bin/
-  [ -n "$(grep ':8' /etc/system-release-cpe)" ] && ln -s /usr/local/bin/ansible-playbook /usr/bin/
+  [ -n "$(grep ':8' /etc/system-release-cpe 2>/dev/null)" ] && ln -s /usr/local/bin/ansible /usr/bin/
+  [ -n "$(grep ':8' /etc/system-release-cpe 2>/dev/null)" ] && ln -s /usr/local/bin/ansible-playbook /usr/bin/
   if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/oracle-release ] || [ -f /etc/system-release ]; then
     # Fix for pycrypto pip / yum issue
     # https://github.com/ansible/ansible/issues/276

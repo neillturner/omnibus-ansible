@@ -138,7 +138,6 @@ if [ ! "$(which ansible-playbook)" ]; then
     echo 'WARN: Not all functionality of ansible may be available'
   fi
 
-  pip install -q six --upgrade
   mkdir -p /etc/ansible/
   printf "%s\n" "[local]" "localhost" > /etc/ansible/hosts
   if [ -z "$ANSIBLE_VERSION" -a -n "$(which pip3)" ]; then
@@ -146,8 +145,10 @@ if [ ! "$(which ansible-playbook)" ]; then
   elif [ -n "$(which pip3)" ]; then
     pip3 install -q ansible=="$ANSIBLE_VERSION"
   elif [ -z "$ANSIBLE_VERSION" ]; then
+    pip install -q six --upgrade
     pip install -q ansible
   else
+    pip install -q six --upgrade
     pip install -q ansible=="$ANSIBLE_VERSION"
   fi
   [ -n "$(grep ':8' /etc/system-release-cpe)" ] && ln -s /usr/local/bin/ansible /usr/bin/

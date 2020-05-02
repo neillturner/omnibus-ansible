@@ -81,8 +81,8 @@ if [ ! "$(which ansible-playbook)" ]; then
     dpkg_check_lock && apt-get update -q
 
     # Install required Python libs and pip
-    apt_install python3-pip python3-yaml python3-jinja2 python3-httplib2 python3-netaddr python3-paramiko python3-pkg-resources libffi-dev python3-all-dev python3-mysqldb
-    [ "X$?" != X0 ] && apt_install python-pip python-yaml python-jinja2 python-httplib2 python-netaddr python-paramiko python-pkg-resources libffi-dev python-all-dev python-mysqldb
+    apt_install python3-pip python3-yaml python3-jinja2 python3-httplib2 python3-netaddr python3-paramiko python3-pkg-resources libffi-dev python3-all-dev python3-mysqldb python3-selinux python3-boto
+    [ "X$?" != X0 ] && apt_install python-pip python-yaml python-jinja2 python-httplib2 python-netaddr python-paramiko python-pkg-resources libffi-dev python-all-dev python-mysqldb python-selinux python-boto
     [ -n "$( dpkg_check_lock && apt-cache search python-keyczar )" ] && apt_install python-keyczar
     dpkg_check_lock && apt-cache search ^git$ | grep -q "^git\s" && apt_install git || apt_install git-core
 
@@ -103,7 +103,7 @@ if [ ! "$(which ansible-playbook)" ]; then
     apt_install sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
 
     # Install Ansible module dependencies
-    apt_install bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux python-boto
+    apt_install bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip
 
   elif [ -f /etc/SuSE-release ] || grep -qi opensuse /etc/os-release; then
     zypper --quiet --non-interactive refresh

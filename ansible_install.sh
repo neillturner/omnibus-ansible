@@ -81,8 +81,8 @@ if [ ! "$(which ansible-playbook)" ]; then
     dpkg_check_lock && apt-get update -q
 
     # Install required Python libs and pip
-    apt_install python3-pip python3-yaml python3-jinja2 python3-httplib2 python3-netaddr python3-paramiko python3-pkg-resources libffi-dev
-    [ "X$?" != X0 ] && apt_install python-pip python-yaml python-jinja2 python-httplib2 python-netaddr python-paramiko python-pkg-resources libffi-dev
+    apt_install python3-pip python3-yaml python3-jinja2 python3-httplib2 python3-netaddr python3-paramiko python3-pkg-resources libffi-dev python3-all-dev python3-mysqldb
+    [ "X$?" != X0 ] && apt_install python-pip python-yaml python-jinja2 python-httplib2 python-netaddr python-paramiko python-pkg-resources libffi-dev python-all-dev python-mysqldb
     [ -n "$( dpkg_check_lock && apt-cache search python-keyczar )" ] && apt_install python-keyczar
     dpkg_check_lock && apt-cache search ^git$ | grep -q "^git\s" && apt_install git || apt_install git-core
 
@@ -94,12 +94,13 @@ if [ ! "$(which ansible-playbook)" ]; then
       easy_install pip
     fi
     # If python-keyczar apt package does not exist, use pip
-    [ -z "$( apt-cache search python-keyczar )" ] && sudo pip install python-keyczar
+    [ -z "$( apt-cache search python-keyczar )" ] && sudo pip3 install python-keyczar || sudo pip install python-keyczar
 
     # Install passlib for encrypt
     apt_install build-essential
     # [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install cryptography==2.0.3
-    apt_install python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
+    apt_install sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
+    apt_install sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
 
     # Install Ansible module dependencies
     apt_install bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux python-boto
@@ -140,7 +141,6 @@ if [ ! "$(which ansible-playbook)" ]; then
   pip install -q six --upgrade
   mkdir -p /etc/ansible/
   printf "%s\n" "[local]" "localhost" > /etc/ansible/hosts
-  set -x
   if [ -z "$ANSIBLE_VERSION" -a -n "$(which pip3)" ]; then
     pip3 install -q ansible
   elif [ -n "$(which pip3)" ]; then
@@ -152,7 +152,6 @@ if [ ! "$(which ansible-playbook)" ]; then
   fi
   [ -n "$(grep ':8' /etc/system-release-cpe)" ] && ln -s /usr/local/bin/ansible /usr/bin/
   [ -n "$(grep ':8' /etc/system-release-cpe)" ] && ln -s /usr/local/bin/ansible-playbook /usr/bin/
-  set +x
   if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/oracle-release ] || [ -f /etc/system-release ]; then
     # Fix for pycrypto pip / yum issue
     # https://github.com/ansible/ansible/issues/276

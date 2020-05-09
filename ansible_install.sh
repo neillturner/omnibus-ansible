@@ -98,9 +98,11 @@ if [ ! "$(which ansible-playbook)" ]; then
 
     # Install passlib for encrypt
     apt_install build-essential
-    # [ X`lsb_release -c | grep trusty | wc -l` = X1 ] && pip install cryptography==2.0.3
-    apt_install sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
-    apt_install sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
+    if [ ! -z "$(which pip3)" ]; then
+      apt_install sshpass && pip3 install pyrax pysphere boto passlib dnspython pyopenssl
+    elif [ ! -z "$(which pip)" ]; then
+      apt_install sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
+    fi
 
     # Install Ansible module dependencies
     apt_install bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip

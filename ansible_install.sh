@@ -99,7 +99,9 @@ if [ ! "$(which ansible-playbook)" ]; then
     # Install passlib for encrypt
     apt_install build-essential
     if [ ! -z "$(which pip3)" ]; then
-      apt_install sshpass && pip3 install pyrax pysphere boto passlib dnspython pyopenssl
+      apt_install sshpass
+      pip3 install cryptography || pip3 install cryptography==3.2.1
+      pip3 install pyrax pysphere boto passlib dnspython pyopenssl
     elif [ ! -z "$(which pip)" ]; then
       apt_install sshpass && pip install pyrax pysphere boto passlib dnspython pyopenssl
     fi
